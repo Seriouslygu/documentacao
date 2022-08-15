@@ -1,0 +1,85 @@
+openapi: 3.0.1
+info:
+  title: Doc and Dev Project
+  version: v1
+  description: Desenvolvendo um serviço desde a sua especificação e documentação até a finalização dos testes.
+  contact: #Informações de contato
+    email: ygor_2201-@hotmail.com
+    name: Ygor Barbosa da Silva
+    url: 'https://github.com/Seriouslygu' #Site para contato
+externalDocs:
+  url: 'https://www.rfc-editor.org/rfc/rfc2616#section-10'
+  description: Status code - RFC 2616
+servers:
+  - url: 'doc_and_dev_project' #Pendente alteração de URL
+paths:
+  /fields:
+    get:
+      summary: Consulta de informações declaradas
+      parameters: 
+        - $ref: '#/components/parameters/identification'
+        - $ref: '#/components/parameters/size'
+      responses:
+        200:
+          $ref: '#/components/responses/FieldLocatedStatusOk'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    identification: 
+      name: identification
+      description: Query info per name
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/IdentificationSchema'
+    size: 
+      name: size
+      description: Query info per size
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/SizeSchema'
+  responses:
+    FieldLocatedStatusOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsultOk'
+    BadRequest:
+      description: BadRequest
+    NotFound:
+      description: NotFound
+    InternalServerError:
+      description: InternalServerError
+  schemas:
+    ConsultOk:
+      type: object
+      properties:
+        atualIdentification:
+          type: string
+          description: Identificação atual da informação
+          example: 'codeInformation'
+        lastUpdate:
+          type: string
+          description: Última atualização da informação
+          example: '12/10/2022'
+        usedAs:
+          type: string
+          description: Última identificação utilizada
+          example: 'NamedName'
+    IdentificationSchema:
+      maximum: 50
+      minimum: 1
+      format: string
+      default: 30
+    SizeSchema:
+      maximum: 50
+      minimum: 1
+      format: string
+      default: 30
